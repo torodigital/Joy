@@ -1,0 +1,21 @@
+{
+    "name": "torodigital/joy",
+    "description": "Personal library for connection with Joy",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.4",
+        "illuminate/support": "^8.83"
+    },
+    "autoload": {
+        "psr-4": {
+            "ToroDigital\\Joy\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Martin Isai",
+            "email": "martin@torodigital.com.mx"
+        }
+    ],
+    "minimum-stability": "stable"
+}
