@@ -9,8 +9,10 @@ class ClientJoy
 {
     private static $cookies;
     private static $client;
+    private static $endpoint = '/participations/v1/tickets-ranking-by-promo/';
+    private static $promotion_id;
 
-    public static function init($host)
+    public static function init($host, $promotion_id)
     {
         self::$client = new Client([
             'base_uri' => $host,
@@ -18,6 +20,8 @@ class ClientJoy
                 'Accept' => 'application/json',
             ]
         ]);
+
+        self::$promotion_id = $promotion_id;
     }
 
     public static function response($res)
@@ -40,8 +44,8 @@ class ClientJoy
 
     public static function getRanking($page = 1, $limit = 10)
     {
-        $res = self::$client->get('/participations/v1/tickets-ranking-by-promo/62?page='.$page.'&limit='.$limit);
-
+        $res = self::$client->get(self::$endpoint.self::$promotion_id.'?page='.$page.'&limit='.$limit);
+        
         $ranking = self::jsonp_decode($res->getBody());
 
         $ranking = new Collection($ranking->data);
