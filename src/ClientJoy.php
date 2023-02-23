@@ -55,7 +55,7 @@ class ClientJoy
 
         $ranking = $ranking->forPage($page,$limit);
 
-        return ['data' => $ranking, 'pages' => $pages, 'total' => $total ];
+        return ['data' => $ranking, 'pages' => $pages, 'current_page' => $page, 'total' => $total];
     }
     
 }
