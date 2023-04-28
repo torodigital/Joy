@@ -3,6 +3,8 @@
 namespace ToroDigital\Joy;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Collection;
 
 class ClientJoy
@@ -44,18 +46,24 @@ class ClientJoy
 
     public static function getRanking($page = 1, $limit = 10)
     {
-        $res = self::$client->get(self::$endpoint.self::$promotion_id.'?page='.$page.'&limit='.$limit);
-        
-        $ranking = self::jsonp_decode($res->getBody());
+        try{
+            $res = self::$client->get(self::$endpoint.self::$promotion_id.'?page='.$page.'&limit='.$limit);
+                    
+            $ranking = self::jsonp_decode($res->getBody());
 
-        $ranking = new Collection($ranking->data);
+            $ranking = new Collection($ranking->data);
 
-        $total = $ranking->count(); //all list count
-        $pages = ceil($total/$limit);
+            $total = $ranking->count(); //all list count
+            $pages = ceil($total/$limit);
 
-        $ranking = $ranking->forPage($page,$limit);
+            $ranking = $ranking->forPage($page,$limit);
 
-        return ['data' => $ranking, 'pages' => $pages, 'current_page' => $page, 'total' => $total];
+            return ['data' => $ranking, 'pages' => $pages, 'current_page' => $page, 'total' => $total];
+        }catch(ServerException $se){
+            return ['data' => [], 'pages' => 0, 'current_page' => 0, 'total' => 0];
+        }catch(ClientException $se){
+            return ['data' => [], 'pages' => 0, 'current_page' => 0, 'total' => 0];
+        }
     }
     
 }
