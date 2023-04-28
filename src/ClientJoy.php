@@ -5,6 +5,7 @@ namespace ToroDigital\Joy;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Support\Collection;
 
 class ClientJoy
@@ -61,7 +62,11 @@ class ClientJoy
             return ['data' => $ranking, 'pages' => $pages, 'current_page' => $page, 'total' => $total];
         }catch(ServerException $se){
             return ['data' => [], 'pages' => 0, 'current_page' => 0, 'total' => 0];
-        }catch(ClientException $se){
+        }catch(ClientException $clientException){
+            return ['data' => [], 'pages' => 0, 'current_page' => 0, 'total' => 0];
+        }catch(ConnectException $ce){
+            return ['data' => [], 'pages' => 0, 'current_page' => 0, 'total' => 0];
+        }catch(Exception $e){
             return ['data' => [], 'pages' => 0, 'current_page' => 0, 'total' => 0];
         }
     }
